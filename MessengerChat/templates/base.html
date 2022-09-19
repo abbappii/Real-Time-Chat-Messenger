@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Time Chat Messenger</title>
+    
+    <style type="text/css">
+        .main{
+            min-height: 100vh;
+            height: 100%;
+        }
+    </style>
+    
+</head>
+<body>
+    <!-- header  -->
+    {% include 'header.html' %}
+    {% include 'base_css.html' %}
+    {% include 'base_js.html' %}
+    
+    
+    <!-- header close  -->
+
+    <!-- body  -->
+    <div class="main">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+    <!-- body close  -->
+
+    <!-- footer  -->
+    {% include 'footer.html' %}
+    <!-- footer close  -->
+
+</body>
+</html>
