@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,7 +27,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # During development only
 
+AUTH_USER_MODEL = "account.Account"
+AUTHENTICATION_BACKENDS = ( 
+    'django.contrib.auth.backends.AllowAllUsersModelBackend', 
+    'account.backends.CaseInsensitiveModelBackend',
+    )
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,6 +47,7 @@ INSTALLED_APPS = [
 
     # installed apps
     'chat',
+    'account',
 ]
 
 MIDDLEWARE = [
@@ -86,8 +94,8 @@ WSGI_APPLICATION = 'MessengerChat.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'messenger',
-        'USER': 'messengeruser',
+        'NAME': 'cahtmessenger',
+        'USER': 'chatmessengeruser',
         'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '5432',
@@ -126,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Dhaka'
 
 USE_I18N = True
 
@@ -136,20 +144,36 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-    BASE_DIR / 'media'
-]
+# STATICFILES_DIRS = [
+#     # BASE_DIR / 'static',
+#     # BASE_DIR / 'media'
+#     os.path.join(BASE_DIR, 'static'),
+#     os.path.join(BASE_DIR, 'media'),
+# ]
 
+# STATIC_URL = '/static/'
+# MEDIA_URL = '/media/'
+
+# STATIC_ROOT = BASE_DIR / 'static_cdn'
+# MEDIA_ROOT = BASE_DIR / 'media_cdn'
+
+# TEMP = BASE_DIR / 'media_cdn/temp'
+
+# BASE_DIR = "http://127.0.0.1:8000"
+
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'media'),
+]
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_cdn')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media_cdn')
 
-STATIC_ROOT = BASE_DIR / 'static_cdn'
-MEDIA_ROOT = BASE_DIR / 'media_cdn'
+TEMP = os.path.join(BASE_DIR, 'media_cdn/temp')
 
-TEMP = BASE_DIR / 'media_cdn/temp'
-
-BASE_DIR = "http://127.0.0.1:8000"
+BASE_URL = "http://127.0.0.1:8000"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
