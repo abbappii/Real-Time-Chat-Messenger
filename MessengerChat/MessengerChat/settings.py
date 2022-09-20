@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -91,8 +91,8 @@ WSGI_APPLICATION = 'MessengerChat.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'messenger',
-        'USER': 'messengeruser',
+        'NAME': 'cahtmessenger',
+        'USER': 'chatmessengeruser',
         'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '5432',
@@ -142,8 +142,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-    BASE_DIR / 'media'
+    # BASE_DIR / 'static',
+    # BASE_DIR / 'media'
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'media'),
 ]
 
 STATIC_URL = '/static/'
