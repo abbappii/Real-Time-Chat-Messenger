@@ -7,12 +7,14 @@ from .views import (
     login_user, 
     logout_user,
     account_view,
+    account_search_view,
 )
 
 urlpatterns = [ 
     path('register/', register_view, name='register'),
     # path('account/<user_id>/',account_view,name='account'),
     path('account/<int:id>/',account_view,name='account'),
+    path('search/', account_search_view,name='search'),
 
     path('login/',login_user,name='login'),
     path('logout/', logout_user,name='logout'),
