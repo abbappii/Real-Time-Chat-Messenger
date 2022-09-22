@@ -1,3 +1,4 @@
+from re import search
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login, authenticate, logout
@@ -117,3 +118,17 @@ def account_view(request,id,*args,**kwargs):
 
 
     return render(request,'account/account.html',context)
+
+def account_search_view(request,*args,**kwargs):
+    context = {}
+    if request.method == 'GET':
+        search_query = request.GET.get('q')
+        if len(search_query) > 0:
+            search_results = Account.objects.filter(email__icontains=search_query).filter(
+                                username__icontains=search_query
+                            )
+            accounts = []
+            for account in search_results:
+                accounts.append((account,False))  # no friends yet    
+            context['accounts'] = accounts          
+    return render(request,'account/search_results.html',context)
