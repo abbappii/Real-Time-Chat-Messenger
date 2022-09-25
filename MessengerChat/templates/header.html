@@ -1,5 +1,10 @@
 {% load static %}
 
+<style>
+	.buton{
+		float: right;
+	}
+</style>
 <!-- Header -->
 <div class="d-flex flex-column flex-lg-row p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
 
@@ -12,7 +17,7 @@
 			<input type="text" class="form-control" name="q" id="id_q_large" placeholder="Search...">
 		</form>
 
-		<div class="d-flex flex-row-reverse flex-grow-1">
+		<div class="d-flex flex-row-reverse flex-grow-1 buton ">
 			<nav class="">
 				{% if request.user.is_authenticated %}
 					<div class="dropdown dropleft show p-2">
