@@ -8,6 +8,7 @@ from .views import (
     logout_user,
     account_view,
     account_search_view,
+    edit_account_view,
 )
 
 urlpatterns = [ 
@@ -18,6 +19,8 @@ urlpatterns = [
 
     path('login/',login_user,name='login'),
     path('logout/', logout_user,name='logout'),
+
+    path('account-edit/<int:id>/',edit_account_view,name='edit'),
 
     # Password reset links (ref: https://github.com/django/django/blob/master/django/contrib/auth/views.py)
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='password_reset/password_change_done.html'), 
