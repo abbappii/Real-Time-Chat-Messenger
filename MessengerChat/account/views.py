@@ -151,6 +151,7 @@ def edit_account_view(request,id, *args, **kwargs):
     if request.method == 'POST':
         form = AccountUpdateForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
+            account.profile_image.delete()
             form.save()
             return redirect('account',request.user.id)
         else:
