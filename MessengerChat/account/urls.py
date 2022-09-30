@@ -9,6 +9,7 @@ from .views import (
     account_view,
     account_search_view,
     edit_account_view,
+    crop_image,
 )
 
 urlpatterns = [ 
@@ -37,4 +38,7 @@ urlpatterns = [
     
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='password_reset/password_reset_complete.html'),
      name='password_reset_complete'),
+
+    # image crop url 
+	path('<int:id>/edit/cropImage/', crop_image, name="crop_image"),
 ]
