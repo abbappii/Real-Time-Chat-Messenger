@@ -8,12 +8,19 @@ module.exports = (config) => {
   config.set({
     autoWatch: false,
     browsers: ['ChromeHeadless'],
+    client: {
+      mocha: {
+        timeout: 10000,
+      },
+    },
     coverageIstanbulReporter: {
       reports: ['html', 'lcovonly', 'text-summary'],
     },
     files: [
-      'node_modules/cropperjs/dist/cropper.css',
-      'test/index.js',
+      'src/index.js',
+      'dist/cropper.css',
+      'test/helpers.js',
+      'test/specs/**/*.spec.js',
       {
         pattern: 'docs/images/*',
         included: false,
@@ -21,14 +28,16 @@ module.exports = (config) => {
     ],
     frameworks: ['mocha', 'chai'],
     preprocessors: {
-      'test/index.js': ['rollup'],
+      'src/index.js': ['rollup'],
+      'test/helpers.js': ['rollup'],
+      'test/specs/**/*.spec.js': ['rollup'],
     },
     reporters: ['mocha', 'coverage-istanbul'],
     rollupPreprocessor: {
       plugins: rollupConfig.plugins,
       output: {
         format: 'iife',
-        name: 'Anonymous',
+        name: 'Cropper',
         sourcemap: 'inline',
       },
     },
