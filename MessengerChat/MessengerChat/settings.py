@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     # installed apps
     'chat.apps.ChatConfig',
     'account.apps.AccountConfig',
+    'friend.apps.FriendConfig',
 ]
 
 MIDDLEWARE = [
