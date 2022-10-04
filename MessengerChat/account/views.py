@@ -252,9 +252,14 @@
 
 import base64
 from re import search
+from shutil import ExecError
+from django.dispatch import receiver
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login, authenticate, logout
+from friend.friend_requests import FriendRequestStatus
+ 
+from friend.utils import get_friend_request_or_false
 
 from account.models import Account
 from account.forms import RegistrationForm, AccountAuthenticationForm, AccountUpdateForm
@@ -262,6 +267,8 @@ from django.conf import settings
 
 from django.core.files.storage import default_storage
 import requests
+
+from friend.models import FriendList, FriendRequests
 
 TEMP_PROFILE_IMAGE_NAME = 'temp_profile_image.png'
 
@@ -359,23 +366,61 @@ def account_view(request,id,*args,**kwargs):
         context['profile_image'] = account.profile_image.url
         context['hide_email'] = account.hide_email
 
+        try:
+            friend_list = FriendList.objects.get(user=account)
+            
+        except FriendList.DoesNotExist:
+            # if doesn't exists friend in freinds list then add to friends list this account
+            friend_list = FriendList(user=account)
+            friend_list.save()
+        # for showing how much friends have in self account 
+        friends = friend_list.friends.all()
+
+        context['friends'] = friends # pass it to context 
+
         # template variable 
         is_self = True
         is_friend = False
         user=request.user
+        
+        request_sent = FriendRequestStatus.NO_REQUEST_SENT.value
+        friend_requests = None
 
         if user.is_authenticated and user != account:
             is_self = False
+            if friends.filter(pk=user.id):
+                is_friend = True
+            else:
+                is_friend = False
+                #case 1 : request has been sent from them to you: FriendRequestStatus.Them_sent_to_you
+                if get_friend_request_or_false(sender=account, receiver=user) != False:
+                    request_sent = FriendRequestStatus.THEM_SENT_TO_YOU.value
+                    context['pending_friend_request_id'] = get_friend_request_or_false(sender=account, receiver=user).id
+
+                # case 2: request has been sent from you to them : FriendRequestStatus.YOU_sent_to_them
+                elif get_friend_request_or_false(sender=account, receiver=user) != False:
+                    request_sent = FriendRequestStatus.THEM_SENT_TO_YOU.value
+                # case 3 : no request has been sent. FriendRequestStatus.No_request_sent 
+                else:
+                    request_sent = FriendRequestStatus.NO_REQUEST_SENT.value
+                
         elif not user.is_authenticated:
             is_self = False
 
+        # case if looking self.profile then show friendrequests that sent to you 
+        else:
+            try:
+                friend_requests = FriendRequests.objects.filter(receiver= user, is_active=True)
+            except:
+                pass
 
         context['is_self'] = is_self
         context['is_friend'] = is_friend
         context['BASE_URL'] = settings.BASE_URL
+        context['request_sent'] = request_sent
+        context['friend_requests'] = friend_requests
 
-
-    return render(request,'account/account.html',context)
+        return render(request,'account/account.html',context)
 
 def account_search_view(request,*args,**kwargs):
     context = {}
