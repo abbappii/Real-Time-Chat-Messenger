@@ -219,7 +219,11 @@
   //preloadImage("{{profile_image|safe}}", 'id_profile_image')
 
   function onFriendRequestSent() {
+    // console.log('location ',location)
+    // console.log('window',window);
+    // localStorage.setItem('key','value')
     location.reload();
+    // console.log('location ',location)
   }
 
   function onFriendRequestCancelled() {
@@ -243,7 +247,7 @@
   );
   if (sendFriendRequestBtn != null) {
     sendFriendRequestBtn.addEventListener("click", function () {
-      //sendFriendRequest("{{id}}", onFriendRequestSent)
+      sendFriendRequest("{{id}}", onFriendRequestSent)
     });
   }
 
@@ -274,6 +278,8 @@
 
 	
 </script>
+
+{% include 'friend/send_friend_request.html' %}
 
 <!-- {#% include 'snippets/send_friend_request.html' %#} {#% include
 'snippets/accept_friend_request.html' %#} {#% include
