@@ -1,10 +1,9 @@
 {% load static %}
 
 <style>
-	.buton{
+	.df{
 		display: flex;
-		flex-direction: row-reverse;
-		/* justify-content: flex-end; */
+		justify-content: flex-end;
 	}
 </style>
 <!-- Header -->
@@ -61,7 +60,7 @@
 			</nav>
 		</div> -->
 
-		<div class="d-flex flex-row-reverse flex-grow-1">
+		<div class="ml-auto">
 			<nav class="">
 				{% if request.user.is_authenticated %}
 					<div class="dropdown dropleft show p-2">

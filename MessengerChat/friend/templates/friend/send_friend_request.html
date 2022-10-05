@@ -1,0 +1,48 @@
+
+<!-- 
+<script type="text/javascript">
+    const base_url = '127.0.0.1:8000'
+    fetch(base_url+'/send_frnd_req/')
+    .then(res=>res.json)
+    .then(data=>console.log(data))
+    .catch(e=>console.log(e))
+</script> -->
+
+<script type="text/javascript">
+
+    function sendFriendRequest(id,uiupdateFunction){
+       
+        payload = {
+            "csrfmiddlewaretoken":"{{ csrf_token }}",
+            "receiver_user_id":id,
+        }
+        $.ajax({
+            type:"POST",
+            datatype: "json",
+            url : "{% url 'send_frnd_req' %}",
+            timeout:5000,
+            data: payload,
+
+            success: function(data){
+                console.log("success",data);
+
+                // if (data['response'] == "")
+                if (data.response == "Friend request sent."){
+                    // ui c 
+                }
+                else if (data.respponse != null){
+                    alert(data['response'])
+                }
+
+            },
+            error: function(data){
+                // console.log("error");
+                console.log("something went wrong ", data);
+            },
+            complete: function(data){
+                uiupdateFunction()
+            }
+
+        })
+    }
+</script>
