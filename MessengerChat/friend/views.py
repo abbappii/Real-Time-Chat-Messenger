@@ -1,11 +1,28 @@
-from curses.ascii import HT
-from telnetlib import DO
-from django.shortcuts import render, HttpResponse
+
+from django.dispatch import receiver
+from django.shortcuts import render, HttpResponse, redirect
 import json
 from account.models import Account
 from friend.models import FriendRequests, FriendList
 # Create your views here.
 
+def friend_requests(request,id):
+    context = {}
+
+    user = request.user
+    if user.is_authenticated:
+        account = Account.objects.get(pk=id)
+        if user == account:
+            friend_requests = FriendRequests.objects.filter(receiver=account, is_active=True)
+            context['friend_requests'] = friend_requests
+        else:
+            return HttpResponse("You cant't view another persons friend requests.")
+
+    else:
+        redirect("login")
+
+    return render(request,'friend/friend_requests.html',context)
+    
 def send_friend_request(request,*args, **kwargs):
     user = request.user
     payload = {}
