@@ -77,14 +77,14 @@
         if (data.response == "Friend request sent.") {
           // ui c
         } else if (data.response != null) {
-          //   alert(data["response"]);
+            alert(data["response"]);
         }
       })
       .then((data) => {
         uiupdateFunction();
       })
       .catch((err) => {
-        console.log("something went wrong ",err);
+        console.log("something went wrong: " + err);
       });
   }
 </script>

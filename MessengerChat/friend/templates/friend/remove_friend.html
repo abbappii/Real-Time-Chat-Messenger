@@ -1,0 +1,35 @@
+<script type="text/javascript">
+    function removeFriend(remove_id,uiupdateFunction){
+        var url = "{% url 'remove_friend' %}"
+        fetch(url,{
+            method: "POST",
+            headers: {
+                "content_type": "application/json",
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": "{{ csrf_token }}",
+            },
+            body: JSON.stringify({
+                remove_id:remove_id,
+            }),
+            timeout: 5000,
+        })
+        .then((res)=>{
+            console.log(res);
+            return res.json()
+        })
+        .then((data) =>{
+            if(data.response == 'Successfully removed that friend.'){
+                console.log("remove done");
+            }
+            else if(data.response !=null){
+                alert("Something went wrong: " + data)
+            }
+        })
+        .then((data)=>{
+            uiupdateFunction()
+        })
+        .catch((err) =>{
+            alert("Something went wrong: " + err)
+        })
+    }
+</script>
