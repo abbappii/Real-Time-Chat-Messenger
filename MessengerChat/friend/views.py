@@ -47,7 +47,7 @@ def send_friend_request(request,*args, **kwargs):
                 # if any of them are active 
                 try:
                     for friend in friend_requests:
-                        if friend.is_active == True:
+                        if friend.is_active:
                             raise Exception("You already sent a friend request.")
                     # if none are active then create a new frnd req 
                     friend_request = FriendRequests(sender=user, receiver=receiver)
@@ -67,9 +67,6 @@ def send_friend_request(request,*args, **kwargs):
 
         else:
             payload['response'] = "Unable to send a friend request."
-
-    
-
     else:
         payload['response'] = "You are not authenticated user."
     # return HttpResponse(json.dumps(payload), content_type="application/json")
@@ -101,4 +98,30 @@ def accept_friend_request(request, *args, **kwargs):
     return JsonResponse(context)
 
     # return HttpResponse(request,json.dumps(context), content_type='application/json')
-                     
+
+def remove_friend(request, *args, **kwargs):
+
+    user = request.user 
+    payload = {}
+    if request.method =="POST" and user.is_authenticated:
+        body_unicode = request.body.decode('utf-8')
+        user_id = json.loads(body_unicode)['remove_id']
+        # user_id = request.POST.get('id') remove_id
+        print("user id: ",user_id)
+
+        if user_id:
+            try:
+                removee = Account.objects.get(pk=user_id)
+                friend_list = FriendList.objects.get(user=user)
+                friend_list.unfrined(removee)
+                payload['response'] = "Successfully removed that friend."
+            except Exception as e:
+                payload['response'] = f"Something went wrond: {str(e)}."
+        else:
+            payload['response'] = "There was an error. Unable to remove that friend."
+    else:
+        payload['response'] = "You must be authenticated to remove a friend."
+
+    
+    return JsonResponse(payload)
+    # return HttpResponse(request, json.dumps(payload))
