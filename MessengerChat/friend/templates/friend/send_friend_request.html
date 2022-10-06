@@ -1,4 +1,3 @@
-
 <!-- 
 <script type="text/javascript">
     const base_url = '127.0.0.1:8000'
@@ -6,43 +5,131 @@
     .then(res=>res.json)
     .then(data=>console.log(data))
     .catch(e=>console.log(e))
+
+    //ft 
+    let pp = {
+    name: "dfajl",
+  };
+  console.log(pp);
+
+  function sendFriendRequest(id, uiupdateFunction) {
+    let payload = {
+      csrfmiddlewaretoken: "{{ csrf_token }}",
+      receiver_user_id: id,
+    };
+    console.log(payload.csrfmiddlewaretoken);
+    console.log(id);
+
+    var x = "{% url 'send_frnd_req' %}";
+    console.log("url : ", x);
+    fetch("http://127.0.0.1:8000/send-frnd-req/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": {{ csrf_token }}
+      },
+      body: JSON.stringify(payload),
+      timeout: 5000,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("success", data);
+
+        // if (data['response'] == "")
+        if (data.response == "Friend request sent.") {
+          // ui c
+        } else if (data.response != null) {
+          alert(data["response"]);
+        }
+      })
+      .then((data) => {
+        uiupdateFunction();
+      })
+      .catch((err) => {
+        console.log("something went wrong ");
+      });
+
 </script> -->
 
+<!-- second try with fetch-->
 <script type="text/javascript">
+  function sendFriendRequest(id, uiupdateFunction) {
+    fetch("http://127.0.0.1:8000/send-frnd-req/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRFToken": "{{ csrf_token }}",
+      },
+      body: JSON.stringify({
+        id:id,
+      }),
+      timeout: 5000,
+    })
+      .then((res) => {
+        console.log(res);
+        return res.json();
+      })
+      .then((data) => {
+        console.log("success", data);
 
-    function sendFriendRequest(id,uiupdateFunction){
-       
-        payload = {
-            "csrfmiddlewaretoken":"{{ csrf_token }}",
-            "receiver_user_id":id,
+        // if (data['response'] == "")
+        if (data.response == "Friend request sent.") {
+          // ui c
+        } else if (data.response != null) {
+            alert(data["response"]);
         }
-        $.ajax({
-            type:"POST",
-            datatype: "json",
-            url : "{% url 'send_frnd_req' %}",
-            timeout:5000,
-            data: payload,
-
-            success: function(data){
-                console.log("success",data);
-
-                // if (data['response'] == "")
-                if (data.response == "Friend request sent."){
-                    // ui c 
-                }
-                else if (data.respponse != null){
-                    alert(data['response'])
-                }
-
-            },
-            error: function(data){
-                // console.log("error");
-                console.log("something went wrong ", data);
-            },
-            complete: function(data){
-                uiupdateFunction()
-            }
-
-        })
-    }
+      })
+      .then((data) => {
+        uiupdateFunction();
+      })
+      .catch((err) => {
+        console.log("something went wrong: " + err);
+      });
+  }
 </script>
+
+
+<!-- second try end  -->
+
+
+<!-- ajax one start  -->
+
+<!-- <script type="text/javascript">
+  
+  function sendFriendRequest(id, uiupdateFunction) {
+    payload = {
+      csrfmiddlewaretoken: "{{ csrf_token }}",
+      receiver_user_id: id,
+    };
+
+    $.ajax({
+      type: "POST",
+      datatype: "json",
+      url: "{% url 'send_frnd_req' %}",
+      timeout: 5000,
+      data: payload,
+
+      success: function (data) {
+        console.log("success", data);
+
+        // if (data['response'] == "")
+        if (data.response == "Friend request sent.") {
+          // ui c
+        } else if (data.response != null) {
+          alert(data["response"]);
+        }
+      },
+      error: function (data) {
+        // console.log("error");
+        console.log("something went wrong ", data);
+      },
+      complete: function (data) {
+        uiupdateFunction();
+      },
+    });
+  }
+</script> -->
+
+
+<!-- ajax one end  -->
