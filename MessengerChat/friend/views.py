@@ -125,3 +125,34 @@ def remove_friend(request, *args, **kwargs):
     
     return JsonResponse(payload)
     # return HttpResponse(request, json.dumps(payload))
+
+
+# decline friend request after sending request someone 
+def decline_friend_request(request,*args, **kwargs):
+    user = request.user
+    context = {}
+
+    if request.method == "GET" and user.is_authenticated:
+        friend_request_id  = kwargs.get('friend_request_id')
+
+        if friend_request_id:
+            friend_request = FriendRequests.objects.get(pk=friend_request_id)
+
+            if friend_request.receiver == user:
+                if friend_request:
+                    friend_request.decline()
+                    context['response'] = "Friend req decline successfully."
+                else:
+                    context['response'] = "Something went wrong."
+            else:
+                context['response'] = "That is not your friend request to decline"
+
+        else:
+             context['response'] = "Unable to decline friend request."
+
+    else:
+        context['response'] = "You must authenticated to decline a friend request."
+
+    return JsonResponse(context)
+    # return HttpResponse(request, json.dumps(context), content_type="application/json")
+
