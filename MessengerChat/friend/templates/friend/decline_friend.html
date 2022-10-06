@@ -1,0 +1,37 @@
+
+<script type="text/javascript">
+    function declineFriendRequest(friend_request_id, uiupdateFunction){
+        var url =
+      "{% url 'decline_friend_request' friend_request_id=165461328456185 %}".replace(
+        "165461328456185",
+        friend_request_id
+    );
+
+    fetch(url,{
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        timeout:5000,
+    })
+    .then((res) => {
+        console.log('response data: ',res);
+        return res.json();
+    })
+    .then((data => {
+        if(data.response == 'Friend req decline successfully.'){
+            console.log("successfully declined");
+        }
+        else if (data.response != null) {
+          alert(data["response"]);
+        }
+    }))
+    .then((data) => {
+        uiupdateFunction()
+    })
+    .catch((err) => {
+        console.log("something went wrong ",err);
+    })
+
+    }
+</script>
