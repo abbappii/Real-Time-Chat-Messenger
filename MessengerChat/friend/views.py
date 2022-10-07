@@ -1,4 +1,5 @@
 
+import this
 from django.dispatch import receiver
 from django.shortcuts import render, HttpResponse, redirect
 from django.http import JsonResponse
@@ -9,6 +10,38 @@ from friend.models import FriendRequests, FriendList
 
 # Create your views here.
 
+def friends_list_view(request,*args, ** kwargs):
+    context = {}
+    user = request.user
+    if user.is_authenticated:
+        user_id = kwargs.get('user_id')
+
+        try:
+            this_user = Account.objects.get(pk=user_id)
+            context['this_user'] = this_user
+
+        except Account.DoesNotExist:
+            return HttpResponse("This user is not exist.")
+
+        try:
+            friend_list = FriendList.objects.get(user=this_user)
+        except FriendList.DoesNotExist:
+            return HttpResponse(f"Could not find a friends list.")
+        
+        # to view a friend list must be mutual frnd 
+        if user != this_user:
+            if not user in friend_list.friends.all():
+                return HttpResponse("You must be friends to view friend list.")
+        
+        friends = []
+        auth_user_frined_list = FriendList.objects.get(user=user)
+        for friend in friend_list.friends.all():
+            friends.append((friends,auth_user_frined_list.is_mutual_friend(friend))) 
+        context['friends'] = friends
+    else:
+        return HttpResponse("You must be authenticated")
+
+    return render(request, 'friend/friend_list.html', context)
 
 def friend_requests(request, id):
     context = {}
