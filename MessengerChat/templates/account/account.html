@@ -256,7 +256,7 @@
   );
   if (cancelFriendRequestBtn != null) {
     cancelFriendRequestBtn.addEventListener("click", function () {
-      //cancelFriendRequest("{{id}}", onFriendRequestCancelled)
+      cencelFriendRequest("{{id}}", onFriendRequestCancelled)
     });
   }
 
@@ -283,7 +283,8 @@
 {% include 'friend/accept_friend_request.html' %}
 {% include 'friend/remove_friend.html' %}
 {% include 'friend/decline_friend.html' %}
+{% include 'friend/cancel_friend_request.html' %}
+
 <!-- 
-{#% include 'snippets/decline_friend_request.html' %#} {#% include
-'snippets/cancel_friend_request.html' %#}  {#% include
+#% include
 'chat/create_or_return_private_chat.html' %#} {% endblock content %} -->
