@@ -1,0 +1,39 @@
+
+<script type="text/javascript">
+  function cencelFriendRequest(receiver_user_id, uiupdateFunction) {
+      var url ="{% url 'cancel_friend_request' %}"
+      console.log(url);
+      fetch("{% url 'cancel_friend_request' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRFToken": "{{ csrf_token }}",
+      },
+      body: JSON.stringify({
+        receiver_user_id:receiver_user_id,
+      }),
+      timeout: 5000,
+    })
+      .then((res) => {
+        console.log("data is:" , res);
+        return res.json();
+      })
+      .then((data) => {
+        console.log("success", data);
+
+        // if (data['response'] == "")
+        if (data.response == "Friend request canceled.") {
+          console.log("req cancel done");
+        } else if (data.response != null) {
+            alert(data["response"]);
+        }
+      })
+      .then((data) => {
+        uiupdateFunction();
+      })
+      .catch((err) => {
+        console.log("something went wrong: " + err);
+      });
+  }
+</script>
