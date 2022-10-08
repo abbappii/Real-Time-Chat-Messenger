@@ -1,5 +1,4 @@
 
-from xml.dom.minidom import Document
 from django.contrib import admin
 from django.contrib.staticfiles.urls import static
 from django.conf import settings
@@ -10,6 +9,7 @@ urlpatterns = [
     path('',include('chat.urls')),
     path('',include('account.urls')),
     path('', include('friend.urls')),
+    # path('public-chat/',include('public_chat.urls')),
 ]
 
 if settings.DEBUG:
