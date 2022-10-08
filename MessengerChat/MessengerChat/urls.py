@@ -9,7 +9,7 @@ urlpatterns = [
     path('',include('chat.urls')),
     path('',include('account.urls')),
     path('', include('friend.urls')),
-    path('public-chat/',include('public_chat.urls')),
+    # path('public-chat/',include('public_chat.urls')),
 ]
 
 if settings.DEBUG:
