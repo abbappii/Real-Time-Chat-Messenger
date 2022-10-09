@@ -1,10 +1,11 @@
 from django.shortcuts import render
 
-# Create your views here.
+from django.conf import settings
 
 def Home(request):
-    name = 'abbappii'
-    context ={
-        'name':name
-    }
+    context = {}
+    context['debug_mode'] = settings.DEBUG
+    context['room_id'] = "1"
+
     return render(request,'home.html',context)
+
