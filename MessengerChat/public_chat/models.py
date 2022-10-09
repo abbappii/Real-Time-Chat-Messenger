@@ -1,7 +1,4 @@
-from enum import unique
-from tokenize import blank_re
 from django.db import models
-from psycopg2 import Timestamp
 
 # Create your models here.
 class PublicChatRoom(models.Model):
@@ -19,7 +16,7 @@ class PublicChatRoom(models.Model):
         is_user_added = False
         if not user in self.users.all():
             self.users.add(user)
-            self.sava()
+            self.save()
             is_user_added = True
         elif user in self.users.all():
             is_user_added = True
