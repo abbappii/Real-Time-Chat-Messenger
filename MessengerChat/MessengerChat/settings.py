@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'friend.apps.FriendConfig',
     'public_chat.apps.PublicChatConfig',
     'channels',
-    
+    'django.contrib.humanize',
+
 ]
 
 MIDDLEWARE = [
@@ -117,10 +118,10 @@ DATABASES = {
 }
 
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
         },
     },
 }
