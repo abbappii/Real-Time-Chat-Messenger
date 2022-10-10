@@ -7,7 +7,7 @@ from django.contrib.humanize.templatetags.humanize import naturalday,naturaltime
 from django.utils import timezone
 from datetime import datetime
 
-from public_chat.models import PublicChatRoom
+from public_chat.models import PublicChatRoom, PublicRoomMessage
 
 User = get_user_model()
 
@@ -95,6 +95,8 @@ class PublicChatConsumer(AsyncJsonWebsocketConsumer):
 
         # get the room and send to the group about it 
         room = await get_room_or_error(room_id)
+
+        await create_public_room_chat_message(self.scope["user"],room, message)
 
 		# Check they are in this room
         await self.channel_layer.group_send(
@@ -223,6 +225,11 @@ def get_room_or_error(room_id):
     except PublicChatRoom.DoesNotExist:
         raise ClientError("Room_Invalid","Invalid room.")
     return room
+
+
+@database_sync_to_async
+def create_public_room_chat_message(user,room,message):
+    return PublicRoomMessage.objects.create(user=user, room = room , content = message)
 
 
 

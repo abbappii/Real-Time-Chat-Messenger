@@ -15,13 +15,13 @@ from .views import (
 urlpatterns = [ 
     path('register/', register_view, name='register'),
     # path('account/<user_id>/',account_view,name='account'),
-    path('account/<int:id>/',account_view,name='account'),
+    path('account/<user_id>/',account_view,name='account'),
     path('search/', account_search_view,name='search'),
 
     path('login/',login_user,name='login'),
     path('logout/', logout_user,name='logout'),
 
-    path('account-edit/<int:id>/',edit_account_view,name='edit'),
+    path('account-edit/<user_id>/',edit_account_view,name='edit'),
 
     # Password reset links (ref: https://github.com/django/django/blob/master/django/contrib/auth/views.py)
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='password_reset/password_change_done.html'), 
@@ -40,5 +40,5 @@ urlpatterns = [
      name='password_reset_complete'),
 
     # image crop url 
-	path('<int:id>/edit/cropImage/', crop_image, name="crop_image"),
+	path('<user_id>/edit/cropImage/', crop_image, name="crop_image"),
 ]

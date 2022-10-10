@@ -91,7 +91,7 @@
 
           <!-- If Auth user is viewing their own profile -->
           {% if is_self %}
-          <a class="mt-4 btn btn-primary" href="{% url 'edit' id  %}">Update</a>
+          <a class="mt-4 btn btn-primary" href="{% url 'edit' user_id=id  %}">Update</a>
           <div class="d-flex flex-column mt-4">
             <a class="m-auto" href="{% url 'password_change' %}"
               >Change password</a
@@ -171,7 +171,7 @@
         <!-- TODO -->
         <!-- Friend list link -->
         <div class="d-flex flex-column pt-4">
-          <a href="{% url 'friend_list' id %}">
+          <a href="{% url 'friend_list' user_id=id %}">
             <div
               class="d-flex flex-row align-items-center justify-content-center icon-container"
             >
@@ -187,7 +187,7 @@
       <div class="card m-2 px-4 pb-4">
         <!-- Friend requests -->
         <div class="d-flex flex-column pt-4">
-          <a href="{% url 'friend_request' user.id %}">
+          <a href="{% url 'friend_request' user_id=id %}">
             <div
               class="d-flex flex-row align-items-center justify-content-center icon-container"
             >
