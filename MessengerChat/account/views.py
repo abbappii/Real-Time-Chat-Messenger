@@ -264,7 +264,11 @@ from account.forms import RegistrationForm, AccountAuthenticationForm, AccountUp
 from django.conf import settings
 
 from django.core.files.storage import default_storage
+
 import requests
+import cv2
+import json
+import base64
 
 from friend.models import FriendList, FriendRequests
 
