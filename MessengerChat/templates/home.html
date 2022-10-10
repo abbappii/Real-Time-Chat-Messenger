@@ -212,6 +212,7 @@
 		div2.appendChild(usernameSpan)
 
 		var timestampSpan = document.createElement("span")
+		timestampSpan.innerHTML = timestamp
 		timestampSpan.classList.add("timestamp-span")
 		timestampSpan.classList.add('d-flex')
 		timestampSpan.classList.add("align-items-center")
@@ -233,7 +234,7 @@
 	}
 
     function selectUser(user_id){
-        var url = "{% url 'account' user.id %}".replace("53252623623632623", user_id)
+        var url = "{% url 'account' user_id=53252623623632623 %}".replace("53252623623632623", user_id)
         var win = window.open(url,"_blank")
         win.focus()
     }

@@ -1,13 +1,14 @@
+from curses import noraw
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 import json
 from channels.db import database_sync_to_async
 from django.contrib.auth import get_user_model
 
-from django.contrib.humanize.templatetags.humanize import naturalday,naturaltime
+from django.contrib.humanize.templatetags.humanize import naturalday
 from django.utils import timezone
 from datetime import datetime
 
-from public_chat.models import PublicChatRoom
+from public_chat.models import PublicChatRoom, PublicRoomMessage
 
 User = get_user_model()
 
@@ -96,6 +97,8 @@ class PublicChatConsumer(AsyncJsonWebsocketConsumer):
         # get the room and send to the group about it 
         room = await get_room_or_error(room_id)
 
+        await create_public_room_chat_message(self.scope["user"],room, message)
+
 		# Check they are in this room
         await self.channel_layer.group_send(
             # "public_chatroom_1",
@@ -116,7 +119,13 @@ class PublicChatConsumer(AsyncJsonWebsocketConsumer):
         # Send a message down to the client
         print("PublicChatConsumer: chat_message from user #" +
               str(event["user_id"]))
-        timestamp = calculate_timestamp(timezone.now())
+        
+        now = timezone.now()
+        print("now time is:",now)
+        timestamp = calculate_timestamp(now)
+
+        print("timestamp time:", timestamp)
+
         await self.send_json(
             {
                 "msg_type": MSG_TYPE_MESSAGE,
@@ -225,14 +234,24 @@ def get_room_or_error(room_id):
     return room
 
 
+@database_sync_to_async
+def create_public_room_chat_message(user,room,message):
+    return PublicRoomMessage.objects.create(user=user, room = room , content = message)
+
+
 
 def calculate_timestamp(timestamp):
     ts = ""
-    if (naturaltime(timestamp) == 'today') or (naturaltime(timestamp) == "yesterday"):
+    if (naturalday(timestamp) == 'today') or (naturalday(timestamp) == "yesterday"):
         str_time = datetime.strftime(timestamp, "%I:%M %p")
+        print("first without strip:",str_time)
         str_time  = str_time.strip("0")
+        print("after strip time",str_time)
         ts = f"{naturalday(timestamp)} at {str_time}" 
+        print("ts : ", ts)
 
     else:
         str_time = datetime.strftime(timestamp,"%m/%d/%Y")
+        print("else case str_time: ", str_time)
         ts = f"{str_time}"
+        print("else case ts: ", ts)

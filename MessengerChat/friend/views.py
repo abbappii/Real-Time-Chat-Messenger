@@ -43,12 +43,13 @@ def friends_list_view(request,*args, ** kwargs):
 
     return render(request, 'friend/friend_list.html', context)
 
-def friend_requests(request, id):
+def friend_requests(request, *args,**kwargs):
     context = {}
 
     user = request.user
     if user.is_authenticated:
-        account = Account.objects.get(pk=id)
+        user_id = kwargs.get("user_id")
+        account = Account.objects.get(pk=user_id)
         if user == account:
             friend_requests = FriendRequests.objects.filter(
                 receiver=account, is_active=True)

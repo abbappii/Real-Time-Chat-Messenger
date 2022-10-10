@@ -264,7 +264,11 @@ from account.forms import RegistrationForm, AccountAuthenticationForm, AccountUp
 from django.conf import settings
 
 from django.core.files.storage import default_storage
+
 import requests
+import cv2
+import json
+import base64
 
 from friend.models import FriendList, FriendRequests
 
@@ -341,7 +345,7 @@ def logout_user(request):
 
 
 
-def account_view(request,id,*args,**kwargs):
+def account_view(request,*args,**kwargs):
     """
 	- Logic here is kind of tricky
 		is_self (boolean)
@@ -351,9 +355,9 @@ def account_view(request,id,*args,**kwargs):
 				1: YOU_SENT_TO_THEM
 	"""
     context = {}
-    # user_id = kwargs.get("user_id")
+    user_id = kwargs.get("user_id")
     try:
-        account=Account.objects.get(id=id)
+        account=Account.objects.get(id=user_id)
     except:
         return HttpResponse("Something went wrong")
     
@@ -497,12 +501,12 @@ def account_search_view(request,*args,**kwargs):
     return render(request,'account/search_results.html',context)
 
 
-def edit_account_view(request,id, *args, **kwargs):
+def edit_account_view(request, *args, **kwargs):
     if not request.user.is_authenticated:
         return redirect('login')
-    # user_id = kwargs.get('user_id')
+    user_id = kwargs.get('user_id')
     try:
-        account = Account.objects.get(pk=id)
+        account = Account.objects.get(pk=user_id)
     except Account.DoesNotExist:
         return HttpResponse("something went wrong")
     
