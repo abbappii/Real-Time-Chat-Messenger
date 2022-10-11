@@ -53,6 +53,11 @@
 }
 </style>
 
+{% if debug %}
+	Public Chat
+{% endif %}
+<span {% if not debug %} d-none {% endif %} page-number id="id_page_number">1</span>
+
 <div class="container">
 	<div class="d-flex flex-column">
 		<div class="d-flex chat-log" id="id_chat_log">
